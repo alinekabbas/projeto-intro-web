@@ -110,15 +110,15 @@ const brigadeiro = [
         preco: 3.50,
         contemLactose: true,
         ingredientes: ["Chocolate ao leite em pó", "leite condensado", "creme de leite", "manteiga"],
-        imagem: "./assets/Brigadeiro.png"
+        imagem: '<img class="imagembrigadeiros" src="./assets/Brigadeiro (200 × 200 px).png" alt="Imagem de brigadeiro">'
     },
 
     {
         sabor: "cajuzinho",
         preco: 3.50,
         contemLactose: true,
-        ingredientes: ["Chocolate Meio Amargo", "amendoim", "leite condensado", "creme de leite", "manteiga"],
-        imagem: "./assets/Cajuzinho.png"
+        ingredientes: ["Chocolate 50%", "amendoim", "leite condensado", "creme de leite", "manteiga"],
+        imagem: '<img class="imagembrigadeiros" src="./assets/Cajuzinho (200 × 200 px).png" alt="Imagem de Doce cajuzinho">'
     },
 
     {
@@ -126,7 +126,7 @@ const brigadeiro = [
         preco: 3.20,
         contemLactose: true,
         ingredientes: ["Coco ralado", "leite condensado", "creme de leite", "manteiga"],
-        imagem: "./assets/Beijinho.png"
+        imagem: '<img class="imagembrigadeiros" src="./assets/Beijinho (200 × 200 px).png" alt="Imagem de beijinho de coco">'
     }
 ]
 
@@ -166,15 +166,70 @@ console.log(recebeObjetoEDevolveString(brigadeiro))
 
 console.log("SEMANA 3 - ITEM 4")
 
-//let itemBuscado = (prompt("O que você busca na nossa loja?"))
+// let itemBuscado = (prompt("O que você busca na nossa loja?"))
 
-function buscaSite(listaDeDoces, buscaCliente) {
-    const retornoBusca = listaDeDoces.filter((item) => {
-        if (item.sabor.toLowerCase() === buscaCliente.toLowerCase()) {
-            return true
-        } 
+// function buscaSite(listaDeDoces, buscaCliente) {
+//     const retornoBusca = listaDeDoces.filter((item) => {
+//         if (item.sabor.toLowerCase() === buscaCliente.toLowerCase()) {
+//             return true
+//         } else {
+//             alert("Item não encontrado")
+//         }
+//     })
+//     return retornoBusca
+// }
+// buscaSite(brigadeiro, itemBuscado)
+
+//SEMANA 6
+//1. Altere seu código para que a tela de lista de itens crie os elementos da lista através de manipulação do DOM.
+//Atualmente, seus elementos estão criados no HTML e no CSS de forma estática, sem que exista interação entre HTML e CSS e o Script que criamos. A ideia é que agora, os dados que compõem os elementos HTML devem ser criados a partir do nosso código JS. Para isso, devemos manipular os objetos do HTML e do CSS utilizando o DOM.
+
+console.log("SEMANA 6 - ITEM 1")
+
+const produtos = document.querySelector(".lista-produtos")
+function listaElementos(brigadeiro) {
+    const imprimeProdutos = brigadeiro.filter((item) => {
+        produtos.innerHTML += 
+        `<section class="sabores">
+            <img ${item.imagem}
+            <ul id="brigchocolate">
+                <li id="sabor">${item.sabor.toUpperCase()}</li><br>
+                <li id="ingredientes"><strong>Ingredientes:</strong> ${item.ingredientes}.</li><br>
+                <li id="lactose"><strong>Contém Lactose:</strong> Sim</li><br>
+                <li id="valor">R$ ${(item.preco).toFixed(2)} (unidade)</li>
+            </ul>
+        </section> `
+
     })
-    console.log(retornoBusca)
-    return retornoBusca
+    return imprimeProdutos
 }
-buscaSite(brigadeiro, itemBuscado)
+listaElementos(brigadeiro)
+
+
+//2. Utilize a função de busca criada no item 2 da semana 6 para fazer com que ao digitar um campo no input e apertar o botão, apenas os itens com nome igual ao da busca sejam renderizados na tela.
+
+function pesquisar(event) {
+    event.preventDefault()
+    let inputPesquisa = document.getElementById("produto").value.toLowerCase()
+    let resultadoPesquisa = document.getElementById("listadeprodutos")
+
+    for (let i = 0; i < brigadeiro.length; i++) {
+        if (inputPesquisa === brigadeiro[i].sabor) {
+            document.getElementById("produto").value = "";
+            return resultadoPesquisa.innerHTML = 
+            `<section class="sabores">
+                <img ${brigadeiro[i].imagem}
+                <ul>
+                    <li id="sabor">${brigadeiro[i].sabor.toUpperCase()}</li><br>
+                    <li id="ingredientes"><strong>Ingredientes:</strong> ${brigadeiro[i].ingredientes}.</li><br>
+                    <li id="lactose"><strong>Contém Lactose:</strong> Sim</li><br>
+                    <li id="valor">R$ ${brigadeiro[i].preco.toFixed(2)} (unidade)</li>
+                </ul>
+            </section> `
+           
+        } 
+    }
+    alert("Não localizei o que deseja. Faça uma nova busca.")
+    document.getElementById("produto").value = "";
+    return;
+}
